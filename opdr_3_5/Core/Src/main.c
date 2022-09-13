@@ -2,26 +2,24 @@
 #include <stdio.h>
 #include <stm32f4xx.h>
 
+// enum representing the states of a traffic light
 enum traffic_light {
 	RED, ORANGE, GREEN
 };
 enum traffic_light light = RED;
+
+// amount of half seconds have passed
 int ticks = 0;
+
+// interrupt handler
 void SysTick_Handler() {
+	// increase amount of half seconds bassed
 	ticks++;
-}
-
-
-/**
- * convert seconds to ticks
- */
-int get_ticks(float s) {
-	return s * 16000000; // 16 MHz clock
 }
 
 int main(void) {
 	// enable systick and interrupts
-	SysTick_Config(8000000);
+	SysTick_Config(8000000); // interrupt every 0.5s
 
 	// GPIO Port D Clock Enable
 	RCC->AHB1ENR = RCC_AHB1ENR_GPIODEN;
@@ -36,7 +34,6 @@ int main(void) {
 		// Wait a moment
 		__WFI();
 
-		// Flip all LEDs
 		switch (light) {
 		case RED:
 			GPIOD->ODR = GPIO_ODR_ODR_14;
@@ -44,7 +41,7 @@ int main(void) {
 				ticks = 0;
 				light = ORANGE;
 			}
-//			light = ORANGE;
+
 			break;
 		case ORANGE:
 			GPIOD->ODR = GPIO_ODR_ODR_13;
@@ -52,7 +49,7 @@ int main(void) {
 				ticks = 0;
 				light = GREEN;
 			}
-//			light = GREEN;
+
 			break;
 		case GREEN:
 			GPIOD->ODR = GPIO_ODR_ODR_12;
@@ -60,7 +57,7 @@ int main(void) {
 				ticks = 0;
 				light = RED;
 			}
-//			light = RED;
+
 			break;
 		}
 	}
