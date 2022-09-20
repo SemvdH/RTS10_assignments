@@ -401,9 +401,9 @@ LOAD /opt/st/stm32cubeide_1.9.0/plugins/com.st.stm32cube.ide.mcu.externaltools.g
  .debug_macro   0x000000000000228e     0xb953 ./Core/Src/main.o
  .debug_macro   0x000000000000dbe1       0x6d ./Core/Src/main.o
 
-.debug_line     0x0000000000000000      0x5b9
- .debug_line    0x0000000000000000      0x532 ./Core/Src/main.o
- .debug_line    0x0000000000000532       0x87 ./Core/Startup/startup_stm32f411vetx.o
+.debug_line     0x0000000000000000      0x5b7
+ .debug_line    0x0000000000000000      0x530 ./Core/Src/main.o
+ .debug_line    0x0000000000000530       0x87 ./Core/Startup/startup_stm32f411vetx.o
 
 .debug_str      0x0000000000000000    0x4ff40
  .debug_str     0x0000000000000000    0x4ff0a ./Core/Src/main.o

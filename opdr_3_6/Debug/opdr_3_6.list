@@ -735,10 +735,10 @@ int main(void) {
  8000622:	f44f 7196 	mov.w	r1, #300	; 0x12c
  8000626:	2002      	movs	r0, #2
  8000628:	f7ff fe22 	bl	8000270 <initialize_task>
-	initialize_task(3, 900, 300, &toggleBlue);
+	initialize_task(3, 400, 300, &toggleBlue);
  800062c:	4b0a      	ldr	r3, [pc, #40]	; (8000658 <main+0x78>)
  800062e:	f44f 7296 	mov.w	r2, #300	; 0x12c
- 8000632:	f44f 7161 	mov.w	r1, #900	; 0x384
+ 8000632:	f44f 71c8 	mov.w	r1, #400	; 0x190
  8000636:	2003      	movs	r0, #3
  8000638:	f7ff fe1a 	bl	8000270 <initialize_task>
 

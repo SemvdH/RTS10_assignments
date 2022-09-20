@@ -118,7 +118,7 @@ int main(void) {
 	initialize_task(0, 100, 200, &toggleGreen);
 	initialize_task(1, 200, 500, &toggleOrange);
 	initialize_task(2, 300, 750, &toggleRed);
-	initialize_task(3, 900, 300, &toggleBlue);
+	initialize_task(3, 400, 300, &toggleBlue);
 
 	// Do forever:
 	while (1) {
