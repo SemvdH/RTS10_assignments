@@ -18,7 +18,7 @@
 
 // Add new task to the taskList
 // priority can be between 0 and 127, higher number means higher priority
-void addTaskToList(void(*function)(void), uint32_t stackSize, int8_t priority);
+void addTaskToList(void(*function)(void), uint32_t stackSize, int8_t priority,uint32_t systick_ticks);
 // Start OS
 void startVersdOS(uint16_t sysTickPeriodIn_ms);
 

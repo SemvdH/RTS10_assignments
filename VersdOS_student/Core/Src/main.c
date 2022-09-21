@@ -32,8 +32,9 @@ void delay_nonblocking (unsigned int ticks) {
 void toggleGreen(void)
 {
 	while(1) {
+		blocking_delay(20);
     	GPIOD->ODR ^= 1 << GREEN;
-    	delay_nonblocking(100);
+    	delay_nonblocking(1000);
 	}
 }
 
@@ -41,7 +42,7 @@ void toggleOrange(void)
 {
 	while(1) {
     	GPIOD->ODR ^= 1 << ORANGE;
-    	delay_nonblocking(200);
+    	delay_nonblocking(700);
 	}
 }
 
@@ -56,9 +57,9 @@ void toggleRed(void)
 void toggleBlue(void)
 {
 	while(1) {
+		blocking_delay(100);
     	GPIOD->ODR ^= 1 << BLUE;
-    	changeSysTick(5);
-    	delay_nonblocking(800);
+    	delay_nonblocking(80);
 	}
 }
 
@@ -106,10 +107,10 @@ int main(void)
 
 
     // Create tasks. Provide fpointer, stacksize, and priority:
-	addTaskToList(toggleGreen, 128, 2);
-    addTaskToList(toggleOrange, 128, 2);
-    addTaskToList(toggleRed, 128, 2);
-    addTaskToList(toggleBlue, 128, 2);
+	addTaskToList(toggleGreen, 128, 3,500);
+    addTaskToList(toggleOrange, 128, 2,100);
+    addTaskToList(toggleRed, 128, 2,200);
+    addTaskToList(toggleBlue, 128, 3,600);
 
 	// Start VersdOS with 1 ms sysTick
 	startVersdOS(1);
