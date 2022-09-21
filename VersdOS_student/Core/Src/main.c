@@ -57,7 +57,7 @@ void toggleBlue(void)
 {
 	while(1) {
     	GPIOD->ODR ^= 1 << BLUE;
-    	SysTick->LOAD = 2 * CLOCK_FREQ_IN_KHz - 1;
+    	changeSysTick(8);
     	delay_nonblocking(800);
 	}
 }

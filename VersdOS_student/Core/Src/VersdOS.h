@@ -23,5 +23,6 @@ void addTaskToList(void(*function)(void), uint32_t stackSize, int8_t priority);
 void startVersdOS(uint16_t sysTickPeriodIn_ms);
 
 void requestDelay(uint32_t ticks);
+void changeSysTick(uint16_t newPeriodIn_ms);
 
 #endif /* VERSDOS_H_ */

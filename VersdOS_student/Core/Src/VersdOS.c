@@ -82,13 +82,6 @@ void addTaskToListAtIndex(void (*function)(void), uint32_t stackSize, int8_t pri
 	 * values that we can recognize.
 	 */
 	*(--(taskToAdd->stack)) 	= 0x01000000;					//XSPR Thumb bit set
-//	*(--(taskToAdd->stack)) 	= 0x00000001;					//CONTROL register nPRIV is 1
-//	*(--(taskToAdd->stack)) 	= 0x00000000;					//BASEPRI
-//	*(--(taskToAdd->stack)) 	= 0x00000000;					//FAULTMASK
-//	*(--(taskToAdd->stack)) 	= 0x00000000;					//PRIMASK
-//	*(--(taskToAdd->stack)) 	= 0x01000000;					//EPSR
-//	*(--(taskToAdd->stack)) 	= 0x00000000;					//IPSR
-//	*(--(taskToAdd->stack)) 	= 0x00000000;					//APSR
 	*(--(taskToAdd->stack)) 	= 0x01000000;					//program status register
 	*(--(taskToAdd->stack)) 	= (int)taskToAdd->function; 	//set PC to function pointer, cast as int to silence the compiler
 	*(--(taskToAdd->stack)) 	= 0xFFFFFFFD; 					//LR, return with process stack (PSP)
@@ -253,8 +246,27 @@ void PendSV_Handler(void)
 
 void SVC_Handler(void)
 {
-	taskToExecute = schedule();
-	SCB->ICSR |= (1<<28);
+	// get pc lsb value to see svc number
+	uint32_t pc = *(currentTask->stack + (15*32)); // register value for pc (or 15*4)
+	if ((pc & 1) == 1) { // svc call was 1
+		taskToExecute = schedule();
+		SCB->ICSR |= (1<<28);
+
+	}
+	else { // svc call was 2
+		// change systick value
+		// use task stack R0 to find parameter
+		uint32_t r0 = *(currentTask->stack + (0*32)); // get r0 (or 0*32)
+		if (r0 < 1 || r0 > 10)
+		{
+			return;
+		} else {
+
+			__set_CONTROL(0); // enter priviliged mode
+			SysTick->LOAD = r0 * CLOCK_FREQ_IN_KHz - 1;
+			__set_CONTROL(1 << CONTROL_nPRIV_Pos); // enter unpriviliged mode
+		}
+	}
 }
 
 //Call Super Visor
@@ -269,6 +281,12 @@ void requestDelay(uint32_t ticks)
 	currentTask->counter = ticks;
 	currentTask->state = WAITING;
 	taskYield();
+}
+
+void changeSysTick(uint16_t newPeriodIn_ms)
+{
+	asm("	svc #2");
+
 }
 
 
