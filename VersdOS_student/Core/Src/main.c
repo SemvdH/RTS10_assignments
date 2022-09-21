@@ -104,6 +104,7 @@ int main(void)
 	// GPIO Port D led pins Push/Pull Output
 	GPIOD->MODER |= 1 << 2 * GREEN | 1 << 2 * ORANGE | 1 << 2 * RED | 1 << 2 * BLUE;
 
+
     // Create tasks. Provide fpointer, stacksize, and priority:
 	addTaskToList(toggleGreen, 128, 2);
     addTaskToList(toggleOrange, 128, 2);

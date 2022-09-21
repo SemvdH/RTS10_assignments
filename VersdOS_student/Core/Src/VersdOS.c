@@ -82,6 +82,14 @@ void addTaskToListAtIndex(void (*function)(void), uint32_t stackSize, int8_t pri
 	 * values that we can recognize.
 	 */
 	*(--(taskToAdd->stack)) 	= 0x01000000;					//XSPR Thumb bit set
+//	*(--(taskToAdd->stack)) 	= 0x00000001;					//CONTROL register nPRIV is 1
+//	*(--(taskToAdd->stack)) 	= 0x00000000;					//BASEPRI
+//	*(--(taskToAdd->stack)) 	= 0x00000000;					//FAULTMASK
+//	*(--(taskToAdd->stack)) 	= 0x00000000;					//PRIMASK
+//	*(--(taskToAdd->stack)) 	= 0x01000000;					//EPSR
+//	*(--(taskToAdd->stack)) 	= 0x00000000;					//IPSR
+//	*(--(taskToAdd->stack)) 	= 0x00000000;					//APSR
+	*(--(taskToAdd->stack)) 	= 0x01000000;					//program status register
 	*(--(taskToAdd->stack)) 	= (int)taskToAdd->function; 	//set PC to function pointer, cast as int to silence the compiler
 	*(--(taskToAdd->stack)) 	= 0xFFFFFFFD; 					//LR, return with process stack (PSP)
 	*(--(taskToAdd->stack)) 	= 0x0000000C;					//R12	Initial values used for debugging purposes
@@ -151,6 +159,8 @@ void startVersdOS(uint16_t sysTickPeriodIn_ms) {
 	// Create Idle task
 	addTaskToListAtIndex(idleTask, 128, -1, IDLE_TASK);
 
+	__set_CONTROL(1 << CONTROL_nPRIV_Pos); // enter unpriviliged mode
+
 	__asm(" wfi"); // Sleep until next SysTick
 }
 
@@ -210,6 +220,7 @@ void SysTick_Handler(void)
 			}
 		}
 	}
+
 	//select the next task
 	taskToExecute = schedule();
 	//request context switch
@@ -219,6 +230,7 @@ void SysTick_Handler(void)
 __attribute__((naked)) // No function entry and exit code
 void PendSV_Handler(void)
 {
+	__set_CONTROL(0); // enter priviliged mode
 	//Push {R4-R11} context to PSP
 	pushRegistersToCurrentPSP();
 	//Save the new stack pointer after the push
@@ -232,6 +244,7 @@ void PendSV_Handler(void)
 	//Pop {R4-R11} context from PSP
 	popRegistersFromCurrentPSP();
 
+	__set_CONTROL(1 << CONTROL_nPRIV_Pos); // enter unpriviliged mode
 	returnToPSP();
 }
 
