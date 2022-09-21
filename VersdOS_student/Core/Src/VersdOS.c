@@ -246,9 +246,12 @@ void PendSV_Handler(void)
 
 void SVC_Handler(void)
 {
-	// get pc lsb value to see svc number
-	uint32_t pc = *(currentTask->stack + (15*32)); // register value for pc (or 15*4)
-	if ((pc & 1) == 1) { // svc call was 1
+	uint32_t *psp = (uint32_t *) __get_PSP(); // get psp and cast to 32 bit int
+
+	uint16_t *pc = (uint16_t *) *(psp + 6); // 16 bit instruction, get psp with offset of 6
+	uint16_t pcInstruction = *(pc-1); // get instruction, -1 because 16 bit instruction
+
+	if ((pcInstruction & 1) == 1) { // svc call was 1
 		taskToExecute = schedule();
 		SCB->ICSR |= (1<<28);
 
@@ -256,7 +259,7 @@ void SVC_Handler(void)
 	else { // svc call was 2
 		// change systick value
 		// use task stack R0 to find parameter
-		uint32_t r0 = *(currentTask->stack + (0*32)); // get r0 (or 0*32)
+		uint32_t r0 = *(psp + 0); // r0 has an offset of 0
 		if (r0 < 1 || r0 > 10)
 		{
 			return;
