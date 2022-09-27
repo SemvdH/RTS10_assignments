@@ -1,0 +1,9 @@
+../Core/Src/main.c:20:6:check_errno	16	static
+../Core/Src/main.c:28:6:check	16	static
+../Core/Src/main.c:45:6:put	16	static
+../Core/Src/main.c:58:6:get	24	static
+../Core/Src/main.c:73:7:producer	32	static
+../Core/Src/main.c:90:7:consumer	32	static
+../Core/Src/main.c:109:5:read_prio	24	static
+../Core/Src/main.c:120:7:main_thread	104	static
+../Core/Src/main.c:184:5:main	24	static

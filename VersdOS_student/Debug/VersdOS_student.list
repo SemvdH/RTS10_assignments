@@ -696,7 +696,7 @@ void SysTick_Handler(void) {
  800055e:	681b      	ldr	r3, [r3, #0]
  8000560:	2203      	movs	r2, #3
  8000562:	731a      	strb	r2, [r3, #12]
-//			}else if (taskList[i].state == RUNNING) {
+
 				taskList[i].systick_counter--;
  8000564:	4943      	ldr	r1, [pc, #268]	; (8000674 <SysTick_Handler+0x160>)
  8000566:	687a      	ldr	r2, [r7, #4]
@@ -761,7 +761,7 @@ void SysTick_Handler(void) {
  80005d6:	701a      	strb	r2, [r3, #0]
  80005d8:	e032      	b.n	8000640 <SysTick_Handler+0x12c>
 				}
-//			}
+
 
 			} else if (taskList[i].state == WAITING) {
  80005da:	4926      	ldr	r1, [pc, #152]	; (8000674 <SysTick_Handler+0x160>)
